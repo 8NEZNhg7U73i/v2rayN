@@ -204,7 +204,7 @@ public partial class CoreConfigV2rayService
         _coreConfig.outbounds.AddRange(proxyOutbounds);
         if (proxyOutbounds.Count(n => n.tag.StartsWith(tag)) > 1)
         {
-            var multipleLoad = node.GetProtocolExtra().MultipleLoad ?? EMultipleLoad.LeastPing;
+            var multipleLoad = GetEffectiveMultipleLoad(node);
             GenObservatory(multipleLoad, tag);
             GenBalancer(multipleLoad, tag);
         }
