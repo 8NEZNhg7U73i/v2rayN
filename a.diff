@@ -1,0 +1,46 @@
+diff --git a/v2rayN/ServiceLib/Handler/ConfigHandler.cs b/v2rayN/ServiceLib/Handler/ConfigHandler.cs
+index 68c7f490..e0849497 100644
+--- a/v2rayN/ServiceLib/Handler/ConfigHandler.cs
++++ b/v2rayN/ServiceLib/Handler/ConfigHandler.cs
+@@ -1420,6 +1420,11 @@ public static class ConfigHandler
+     /// <param name="subItem">Sub-item for grouping</param>
+     /// <returns>Result object with success state and data</returns>
+     public static async Task<RetResult> AddGroupAllServer(Config config, SubItem? subItem)
++    {
++        return await AddGroupAllServer(config, subItem, EMultipleLoad.LeastPing);
++    }
++
++    public static async Task<RetResult> AddGroupAllServer(Config config, SubItem? subItem, EMultipleLoad multipleLoad)
+     {
+         var result = new RetResult();
+ 
+@@ -1446,7 +1451,7 @@ public static class ConfigHandler
+         }
+         var extraItem = new ProtocolExtraItem
+         {
+-            MultipleLoad = EMultipleLoad.LeastPing,
++            MultipleLoad = multipleLoad,
+             GroupType = profile.ConfigType.ToString(),
+             SubChildItems = subId,
+             Filter = Global.PolicyGroupDefaultAllFilter,
+@@ -1485,6 +1490,11 @@ public static class ConfigHandler
+     };
+ 
+     public static async Task<RetResult> AddGroupRegionServer(Config config, SubItem? subItem)
++    {
++        return await AddGroupRegionServer(config, subItem, EMultipleLoad.LeastPing);
++    }
++
++    public static async Task<RetResult> AddGroupRegionServer(Config config, SubItem? subItem, EMultipleLoad multipleLoad)
+     {
+         var result = new RetResult();
+         var subId = subItem?.Id;
+@@ -1514,7 +1524,7 @@ public static class ConfigHandler
+             }
+             var extraItem = new ProtocolExtraItem
+             {
+-                MultipleLoad = EMultipleLoad.LeastPing,
++                MultipleLoad = multipleLoad,
+                 GroupType = profile.ConfigType.ToString(),
+                 SubChildItems = subId,
+                 Filter = CombineWithDefaultAllFilter(regionFilter.Value),
