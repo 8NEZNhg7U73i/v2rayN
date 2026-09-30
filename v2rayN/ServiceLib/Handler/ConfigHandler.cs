@@ -1421,6 +1421,11 @@ public static class ConfigHandler
     /// <returns>Result object with success state and data</returns>
     public static async Task<RetResult> AddGroupAllServer(Config config, SubItem? subItem)
     {
+        return await AddGroupAllServer(config, subItem, EMultipleLoad.LeastPing);
+    }
+
+    public static async Task<RetResult> AddGroupAllServer(Config config, SubItem? subItem, EMultipleLoad multipleLoad)
+    {
         var result = new RetResult();
 
         var subId = subItem?.Id;
@@ -1446,7 +1451,7 @@ public static class ConfigHandler
         }
         var extraItem = new ProtocolExtraItem
         {
-            MultipleLoad = EMultipleLoad.LeastPing,
+            MultipleLoad = multipleLoad,
             GroupType = profile.ConfigType.ToString(),
             SubChildItems = subId,
             Filter = Global.PolicyGroupDefaultAllFilter,
@@ -1486,6 +1491,11 @@ public static class ConfigHandler
 
     public static async Task<RetResult> AddGroupRegionServer(Config config, SubItem? subItem)
     {
+        return await AddGroupRegionServer(config, subItem, EMultipleLoad.LeastPing);
+    }
+
+    public static async Task<RetResult> AddGroupRegionServer(Config config, SubItem? subItem, EMultipleLoad multipleLoad)
+    {
         var result = new RetResult();
         var subId = subItem?.Id;
         if (subId.IsNullOrEmpty())
@@ -1514,7 +1524,7 @@ public static class ConfigHandler
             }
             var extraItem = new ProtocolExtraItem
             {
-                MultipleLoad = EMultipleLoad.LeastPing,
+                MultipleLoad = multipleLoad,
                 GroupType = profile.ConfigType.ToString(),
                 SubChildItems = subId,
                 Filter = CombineWithDefaultAllFilter(regionFilter.Value),
