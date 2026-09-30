@@ -1,5 +1,4 @@
 diff --git a/v2rayN/ServiceLib/Handler/ConfigHandler.cs b/v2rayN/ServiceLib/Handler/ConfigHandler.cs
-index 68c7f490..e0849497 100644
 --- a/v2rayN/ServiceLib/Handler/ConfigHandler.cs
 +++ b/v2rayN/ServiceLib/Handler/ConfigHandler.cs
 @@ -1420,6 +1420,11 @@ public static class ConfigHandler
@@ -13,7 +12,7 @@ index 68c7f490..e0849497 100644
 +    public static async Task<RetResult> AddGroupAllServer(Config config, SubItem? subItem, EMultipleLoad multipleLoad)
      {
          var result = new RetResult();
- 
+
 @@ -1446,7 +1451,7 @@ public static class ConfigHandler
          }
          var extraItem = new ProtocolExtraItem
@@ -25,7 +24,7 @@ index 68c7f490..e0849497 100644
              Filter = Global.PolicyGroupDefaultAllFilter,
 @@ -1485,6 +1490,11 @@ public static class ConfigHandler
      };
- 
+
      public static async Task<RetResult> AddGroupRegionServer(Config config, SubItem? subItem)
 +    {
 +        return await AddGroupRegionServer(config, subItem, EMultipleLoad.LeastPing);
