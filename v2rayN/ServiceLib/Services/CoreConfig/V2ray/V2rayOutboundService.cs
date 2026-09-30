@@ -8,7 +8,7 @@ public partial class CoreConfigV2rayService
         _coreConfig.outbounds.InsertRange(0, proxyOutboundList);
         if (proxyOutboundList.Count(n => n.tag.StartsWith(Global.ProxyTag)) > 1)
         {
-            var multipleLoad = _node.GetProtocolExtra().MultipleLoad ?? EMultipleLoad.LeastPing;
+            var multipleLoad = GetEffectiveMultipleLoad(_node);
             GenObservatory(multipleLoad);
             GenBalancer(multipleLoad);
         }
@@ -17,6 +17,44 @@ public partial class CoreConfigV2rayService
             _coreConfig.outbounds.Add(BuildDnsOutbound());
         }
     }
+    /// <summary>
+    /// Gets the balance policy that should control an expanded group/chain.
+    ///
+    /// A ProxyChain can contain a PolicyGroup. BuildChainOutboundsList expands
+    /// that PolicyGroup into concrete chain branches, so the PolicyGroup's
+    /// MultipleLoad must be applied to the resulting chain branches.
+    ///
+    /// Xray's sockopt.dialerProxy cannot directly reference a balancerTag.
+    /// Therefore, for a ProxyChain containing exactly one PolicyGroup, the
+    /// PolicyGroup policy is applied to the final balancer over the generated
+    /// chain branches.
+    ///
+    /// When more than one PolicyGroup is present in the same ProxyChain and
+    /// they use different policies, there is no direct Xray representation
+    /// for independent nested balancers inside dialerProxy. In that case the
+    /// ProxyChain's own MultipleLoad remains the controlling policy.
+    /// </summary>
+    private EMultipleLoad GetEffectiveMultipleLoad(ProfileItem node)
+    {
+        var multipleLoad = node.GetProtocolExtra().MultipleLoad ?? EMultipleLoad.LeastPing;
+
+        if (node.ConfigType != EConfigType.ProxyChain)
+        {
+            return multipleLoad;
+        }
+
+        var policyGroups = new List<ProfileItem>();
+        foreach (var nodeId in Utils.String2List(node.GetProtocolExtra().ChildItems) ?? [])
+        {
+            if (context.AllProxiesMap.TryGetValue(nodeId, out var child)
+                && child.ConfigType == EConfigType.PolicyGroup)
+            {
+                policyGroups.Add(child);
+            }
+        }
+        return policyGroups[0].GetProtocolExtra().MultipleLoad ?? multipleLoad;
+    }
+
 
     private List<Outbounds4Ray> BuildAllProxyOutbounds(string baseTagName = Global.ProxyTag)
     {
