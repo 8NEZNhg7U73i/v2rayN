@@ -52,7 +52,17 @@ public partial class CoreConfigV2rayService
                 policyGroups.Add(child);
             }
         }
-        return policyGroups[0].GetProtocolExtra().MultipleLoad ?? multipleLoad;
+
+        multipleLoad = (ServiceLib.Enums.EMultipleLoad)policyGroups[0].GetProtocolExtra().MultipleLoad;
+
+        for (int i = 1; i < policyGroups.Count; i++)
+        {
+            if ((int)multipleLoad > (int)policyGroups[i].GetProtocolExtra().MultipleLoad)
+            {
+                multipleLoad = (ServiceLib.Enums.EMultipleLoad)policyGroups[i].GetProtocolExtra().MultipleLoad;
+            }
+        }
+        return multipleLoad;
     }
 
 
