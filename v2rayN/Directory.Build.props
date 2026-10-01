@@ -1,7 +1,7 @@
 <Project>
 
     <PropertyGroup>
-        <Version>7.25.4</Version>
+        <Version>v7.25.4-proxygroup-policy</Version>
     </PropertyGroup>
 
     <PropertyGroup>
