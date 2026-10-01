@@ -26,7 +26,6 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-
       - name: Trigger build windows
         if: inputs.release_tag != ''
         run: |
