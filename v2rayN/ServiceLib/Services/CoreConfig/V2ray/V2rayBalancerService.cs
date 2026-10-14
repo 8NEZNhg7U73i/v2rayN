@@ -48,8 +48,8 @@ public partial class CoreConfigV2rayService
                     pingConfig = new()
                     {
                         destination = AppManager.Instance.Config.SpeedTestItem.SpeedPingTestUrl,
-                        interval = "5m",
-                        timeout = "30s",
+                        interval = "15s",
+                        timeout = "5s",
                         sampling = 2,
                     }
                 };
