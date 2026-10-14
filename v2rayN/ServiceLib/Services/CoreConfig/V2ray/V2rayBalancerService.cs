@@ -50,7 +50,7 @@ public partial class CoreConfigV2rayService
                         destination = AppManager.Instance.Config.SpeedTestItem.SpeedPingTestUrl,
                         interval = "15s",
                         timeout = "5s",
-                        sampling = 2,
+                        sampling = 3,
                     }
                 };
             }
